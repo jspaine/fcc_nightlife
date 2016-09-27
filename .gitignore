@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+public
+typings
+typings.json
+.vscode
+.tmp
+server/config/index.js
