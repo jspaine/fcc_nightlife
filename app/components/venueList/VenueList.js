@@ -1,8 +1,22 @@
-import React from 'react'
+import React, {Component} from 'react'
 
-export default ({venues}) =>
-  <div>
-    {venues.map(venue =>
-      <div>{venue.id}</div>
-    )}
-  </div>
+import {VenueCard} from 'components'
+
+export default class extends Component {
+  render() {
+    const {venues, plansByVenue, user, savePlan} = this.props
+    return (
+      <div>
+        {venues.map(venue =>
+          <VenueCard
+            key={venue.id}
+            venue={venue}
+            plans={plansByVenue(venue.id)}
+            user={user}
+            savePlan={savePlan}
+          />
+        )}
+      </div>
+    )
+  }
+}

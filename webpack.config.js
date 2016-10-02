@@ -47,9 +47,11 @@ const common = {
   },
   resolve: {
     alias: {
-      store: path.resolve(__dirname, 'app', 'store'),
       containers: path.resolve(__dirname, 'app', 'containers'),
-      components: path.resolve(__dirname, 'app', 'components')
+      components: path.resolve(__dirname, 'app', 'components'),
+      lib: path.resolve(__dirname, 'app', 'lib'),
+      store: path.resolve(__dirname, 'app', 'store'),
+      theme: path.resolve(__dirname, 'app', 'theme')
     }
   },
   sassLoader: {

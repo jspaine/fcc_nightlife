@@ -35,9 +35,7 @@ export default new class {
             return res.text()
           }
         })
-        .then(res => {
-          return schema ? normalize(res, schema) : res
-        })
+        .then(res => schema ? normalize(res, schema) : res)
         .catch(err => {
           throw {
             status: err.status,

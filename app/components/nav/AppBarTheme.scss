@@ -1,0 +1,14 @@
+@import "~react-toolbox/lib/globals";
+@import "~react-toolbox/lib/app_bar/config";
+
+.appBar {
+  justify-content: space-between;
+  @media screen and (max-width: $layout-breakpoint-xxs) {
+    flex-wrap: wrap;
+    height: $appbar-height * 2;
+    &.fixed {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+  }
+}

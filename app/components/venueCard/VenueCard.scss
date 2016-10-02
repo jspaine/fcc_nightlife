@@ -1,0 +1,21 @@
+.cardTitle {
+  flex-grow: 1;
+  [data-react-toolbox="avatar"] {
+    min-width: 40px;
+    img {
+      height: 100%;
+    }
+  }
+  cursor: pointer;
+}
+
+.going {
+  text-align: right;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

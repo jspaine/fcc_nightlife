@@ -130,42 +130,32 @@ const deletePlanFailure = (error) => ({
 export const loadPlansEpic = action$ =>
   action$.ofType(LOAD_PLANS_REQUEST)
     .mergeMap(action => {
-      const url = action.query.user ?
-          `api/plans/byuser/${action.query.user}` :
-          `api/plans/byvenues/${JSON.encode(action.query.venues || [])}`
+      let url
+      const {query} = action
+      if (!query) {
+        url = 'api/plans'
+      } else if (query.user) {
+        url = `api/plans/byuser/${query.user}`
+      } else {
+        url = `api/plans/byvenues/${JSON.stringify(query.venues || [])}`
+      }
       return api.get(url, {schema: schema.arrayOfPlans})
         .map(loadPlansSuccess)
         .catch(err => Observable.of(loadPlansFailure(err)))
     })
 
- export const savePlanEpic = action$ =>
+export const savePlanEpic = action$ =>
   action$.ofType(SAVE_PLAN_REQUEST)
-    .mergeMap(action => {
-      if (action.plan._id) {
-        return api.put(`api/plans/${action.plan._id}`, {
-          data: action.plan,
-          schema: schema.plan
-        })
-          .flatMap(data =>
-            Observable.concat(
-              Observable.of(push(`/plans/${data.result}`)),
-              Observable.of(savePlanSuccess(data))
-            )
-          )
-          .catch(err => Observable.of(savePlanFailure(err)))
-      }
-      return api.post('api/plans', {
+    .mergeMap(action => api.post('api/plans', {
         data: action.plan,
         schema: schema.plan
       })
-        .flatMap(data =>
-          Observable.concat(
-            Observable.of(push(`/plans/${data.result}`)),
-            Observable.of(savePlanSuccess(data))
-          )
-        )
-        .catch(err => Observable.of(savePlanFailure(err)))
-    })
+        .map(savePlanSuccess)
+        .catch(err => {
+          console.error('savePlan error', err)
+          return Observable.of(savePlanFailure(err))
+        })
+    )
 
 export const deletePlanEpic = action$ =>
   action$.ofType(DELETE_PLAN_REQUEST)
@@ -177,12 +167,43 @@ export const deletePlanEpic = action$ =>
         .catch(err => Observable.of(deletePlanFailure(err)))
     )
 
-export const getAllPlans = (plans, entities) =>
-  denormalize([...plans.ids], entities, schema.arrayOfPlans)
+export const getAll = (plans, entities) =>
+  plans ? denormalize([...plans.ids], entities, schema.arrayOfPlans) : []
 
-export const getPlanById = (id, plans, entities) => {
+export const getById = (id, plans, entities) => {
   if (!plans.ids.has(id)) return
   return denormalize(id, entities, schema.plan)
 }
 
-export const getIsPending = (state) => state.pending
+export const getByVenue = (venueId, plans, entities) =>
+  venueId && getAll(plans, entities)
+    .filter(plan => plan.venue.id === venueId)
+
+export const getByTime = (plans, entities) =>
+  groupBy(getAll(plans, entities), 'time')
+
+export const getByUser = (userId, plans, entities) =>
+  userId && getAll(plans, entities)
+    .filter(plan => plan.user._id === userId)
+
+export const getByVenueGroupByTime = (venueId, plans, entities) =>
+  groupBy(getByVenue(venueId, plans, entities), 'time')
+
+export const getPending = (state) => state.pending
+
+function groupBy(xs, key) {
+  return xs.reduce(function (rv, x) {
+    let v = key instanceof Function ? key(x) : x[key];
+    let el = rv.find((r) => r && r.key === v);
+    if (el) {
+      el.values.push(x);
+    } else {
+      rv.push({ key: v, values: [x] });
+    }
+    return rv;
+  }, []).sort((a, b) => {
+    if (a.key < b.key) return -1
+    if (a.key > b.key) return 1
+    return 0
+  })
+}

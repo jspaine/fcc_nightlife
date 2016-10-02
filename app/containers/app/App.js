@@ -9,6 +9,7 @@ import {Nav, VenueList} from 'components'
 import {NavDrawer} from 'containers'
 import {loginOAuth} from 'store/modules/auth'
 import {updateTerm, loadResultsRequest} from 'store/modules/search'
+import {loadPlansRequest, savePlanRequest} from 'store/modules/plans'
 import {selectors} from 'store/modules'
 
 import style from './App.scss'
@@ -19,6 +20,7 @@ const stateToProps = (state) => ({
   searchResults: selectors.getSearchResults(state),
   searchError: selectors.getSearchError(state),
   searchFetching: selectors.getSearchFetching(state),
+  plansByVenue: (venueId) => selectors.getPlansByVenueGroupByTime(state, venueId),
   drawerOpen: state.ui.drawer
 })
 
@@ -26,7 +28,8 @@ const dispatchToProps = (dispatch) => ({
   menuClick: () => dispatch(openDrawer()),
   pushState: (loc) => dispatch(push(loc)),
   login: (token) => dispatch(loginOAuth(token)),
-  updateSearchTerm: (term) => dispatch(updateTerm(term))
+  updateSearchTerm: (term) => dispatch(updateTerm(term)),
+  savePlan: (plan) => dispatch(savePlanRequest(plan))
 })
 
 class App extends React.Component {
@@ -56,11 +59,17 @@ class App extends React.Component {
             searchTerm={this.props.searchTerm}
             searchFetching={this.props.searchFetching}
             updateSearchTerm={this.props.updateSearchTerm}
+            route={this.props.location.pathname}
           />
           {this.props.user && <NavDrawer />}
-          {this.props.searchResults.length === 0 && this.props.children}
-          {this.props.searchResults.length > 0 &&
-            <VenueList venues={this.props.searchResults} />
+          {(this.props.searchResults.length > 0 && this.props.location.pathname === '/') ?
+            <VenueList
+              venues={this.props.searchResults}
+              plansByVenue={this.props.plansByVenue}
+              user={this.props.user}
+              savePlan={this.props.savePlan}
+            /> :
+            this.props.children
           }
         </Panel>
       </Layout>

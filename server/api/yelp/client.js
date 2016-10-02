@@ -14,7 +14,13 @@ async function search(term, categories) {
       'Authorization': `Bearer ${creds.token}`
     }
   })
-  return await response.json()
+  let parsed
+  try {
+    parsed = await response.json()
+  } catch (err) {
+    parsed = await response.text()
+  }
+  return parsed
 }
 
 async function business(id) {

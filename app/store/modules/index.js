@@ -32,16 +32,28 @@ export const rootEpic = combineEpics(
 
 export const selectors = {
   getAllPlans(state) {
-    return fromPlans.getAllPlans(state.plans, state.entities)
+    return fromPlans.getAll(state.plans, state.entities)
   },
   getPlanById(state, id) {
-    return fromPlans.getPlanById(id, state.plans, state.entities)
+    return fromPlans.getById(id, state.plans, state.entities)
+  },
+  getPlansByVenue(state, venueId) {
+    return fromPlans.getByVenue(venueId, state.plans, state.entities)
+  },
+  getPlansByTime(state) {
+    return fromPlans.getByTime(state.plans, state.entities)
+  },
+  getPlansByUser(state, userId) {
+    return fromPlans.getByUser(userId, state.plans, state.entities)
+  },
+  getPlansByVenueGroupByTime(state, venueId) {
+    return fromPlans.getByVenueGroupByTime(venueId, state.plans, state.entities)
   },
   getPlansPending(state) {
-    return fromPlans.getIsPending(state.plans)
+    return fromPlans.getPending(state.plans)
   },
   getAllUsers(state) {
-    return fromUsers.getAllUsers(state.users, state.entities)
+    return fromUsers.getAll(state.users, state.entities)
   },
   getUserId(state) {
     return fromAuth.getUserId(state.auth)

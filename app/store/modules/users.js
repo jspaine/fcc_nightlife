@@ -175,6 +175,6 @@ export const deleteUserEpic = action$ =>
         .catch(err => Observable.of(deleteUserFailure(err)))
     )
 
-export function getAllUsers(users, entities) {
+export function getAll(users, entities) {
   return denormalize([...users.ids], entities, schema.arrayOfUsers)
 }

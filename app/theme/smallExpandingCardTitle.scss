@@ -1,0 +1,11 @@
+@import "~react-toolbox/lib/globals";
+
+.cardTitle.large {
+  flex-grow: 1;
+  .subtitle {
+    font-size: $font-size-tiny;
+  }
+  .title {
+    font-size: $font-size-small;
+  }
+}

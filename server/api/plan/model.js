@@ -27,8 +27,9 @@ export const PlanSchema = new Schema({
 })
 
 PlanSchema.index({
-  venue: 1,
-  user: 1
-})
+  'venue.id': 1,
+  user: 1,
+  time: 1
+}, {unique: true})
 
 export default mongoose.model('Plan', PlanSchema)

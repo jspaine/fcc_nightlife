@@ -1,11 +1,23 @@
+@import "~react-toolbox/lib/globals";
+
+.home {
+  order: 0;
+}
+
+.searchField {
+  order: 1;
+  @media screen and (max-width: $layout-breakpoint-xxs) {
+    order: 2;
+  }
+}
+
 .nav {
-  position: fixed;
-  right: 10px;
+  order: 2;
+  @media screen and (max-width: $layout-breakpoint-xxs) {
+    order: 1;
+  }
   a {
-    display: inline-block;
     padding: 20px;
   }
 }
-.appBar.fixed {
-  z-index: 298;
-}
+

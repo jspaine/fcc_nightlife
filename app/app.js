@@ -12,6 +12,7 @@ if (__DEVELOPMENT__) {
   try {
     render(<Router />, root)
   } catch (err) {
+    console.error(err.message, err.stack)
     render(<RedBox error={err} />, root)
   }
 } else {

@@ -38,22 +38,38 @@ async function seedPlans() {
   const user2 = await User.findOne({username: 'test'})
   await Plan.create({
     user: user1,
-    venue: {id: '1234', name: 'bar1'},
-    time: Date.now()
+    venue: {
+      id: 'aint-nothin-but-london',
+      name: 'Ain\'t Nothin\' But...',
+      image_url: 'https://s3-media4.fl.yelpcdn.com/bphoto/C1mZteExdl-Xu-gNzizsRQ/o.jpg'
+    },
+    time: Date.now() + 70000000
   })
   await Plan.create({
     user: user2,
-    venue: {id: '1234', name: 'bar1'},
-    time: Date.now()
+    venue: {
+      id: 'aint-nothin-but-london',
+      name: 'Ain\'t Nothin\' But...',
+      image_url: 'https://s3-media4.fl.yelpcdn.com/bphoto/C1mZteExdl-Xu-gNzizsRQ/o.jpg'
+    },
+    time: Date.now() + 70000000
   })
   await Plan.create({
     user: user1,
-    venue: {id: '5678', name: 'bar2'},
+    venue: {
+      id: 'nightjar-london',
+      name: 'Nightjar',
+      image_url: 'https://s3-media1.fl.yelpcdn.com/bphoto/xCgggQXLi7uhrDysPE9P0w/o.jpg'
+    },
     time: Date.now() + 50000000
   })
   await Plan.create({
     user: user2,
-    venue: {id: '5678', name: 'bar2'},
+    venue: {
+      id: 'nightjar-london',
+      name: 'Nightjar',
+      image_url: 'https://s3-media1.fl.yelpcdn.com/bphoto/xCgggQXLi7uhrDysPE9P0w/o.jpg'
+    },
     time: Date.now() + 50000000
   })
 }

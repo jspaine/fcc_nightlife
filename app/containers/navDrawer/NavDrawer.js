@@ -37,16 +37,6 @@ const NavDrawer = ({
       <Avatar image={user.image} />
     </MenuItem>
     <MenuDivider />
-    <Link to="polls/new" onClick={closeDrawer}>
-      <MenuItem caption="New Poll" />
-    </Link>
-    <Link to={`polls/by/user/${user._id}`} onClick={closeDrawer}>
-      <MenuItem caption="My Polls" />
-    </Link>
-    <Link to={`votes/by/user/${user._id}`} onClick={closeDrawer}>
-      <MenuItem caption="My Votes" />
-    </Link>
-    <MenuDivider />
     {(user && user.role === 'admin') &&
       <div>
         <Link to={'users'} onClick={closeDrawer}>

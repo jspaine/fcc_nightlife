@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/throttle'
 
 import api from '../../lib/apiClient'
+import {loadPlansRequest} from './plans'
 
 const UPDATE_TERM = 'search/UPDATE_TERM'
 const SET_FETCHING = 'search/SET_FETCHING'
@@ -11,10 +12,12 @@ const LOAD_RESULTS_SUCCESS = 'search/LOAD_RESULTS_SUCCESS'
 const LOAD_RESULTS_FAILURE = 'search/LOAD_RESULTS_FAILURE'
 const RESET_ERROR = 'search/RESET_ERROR'
 
+const search = JSON.parse(localStorage.getItem('search'))
+
 const initialState = {
-  term: '',
+  term: search && search.term || '',
   fetching: false,
-  results: [],
+  results: search && search.results || [],
   error: null
 }
 
@@ -53,10 +56,13 @@ export default (state = initialState, action) => {
   }
 }
 
-export const updateTerm = (term) => ({
-  type: UPDATE_TERM,
-  term
-})
+export const updateTerm = (term) => {
+  localStorage.removeItem('search')
+  return {
+    type: UPDATE_TERM,
+    term
+  }
+}
 
 export const resetError = () => ({
   type: RESET_ERROR
@@ -66,10 +72,13 @@ export const setFetching = () => ({
   type: SET_FETCHING,
 })
 
-const loadResultsSuccess = (results) => ({
-  type: LOAD_RESULTS_SUCCESS,
-  results: results.businesses
-})
+const loadResultsSuccess = (results, term) => {
+  localStorage.setItem('search', JSON.stringify({term, results}))
+  return {
+    type: LOAD_RESULTS_SUCCESS,
+    results: results
+  }
+}
 
 const loadResultsFailure = (error) => ({
   type: LOAD_RESULTS_FAILURE,
@@ -82,7 +91,12 @@ export const loadResultsEpic = action$ =>
     .switchMap(action =>
       Observable.merge(
         api.get(`api/yelp/search/${action.term}`)
-          .map(loadResultsSuccess)
+          .flatMap(results => {
+            return Observable.concat(
+              Observable.of(loadResultsSuccess(results.businesses, action.term)),
+              Observable.of(loadPlansRequest({venues: results.businesses.map(venue => venue.id)}))
+            )
+          })
           .catch(err => Observable.of(loadResultsFailure(err))),
         Observable.of(setFetching())
       )

@@ -1,5 +1,9 @@
+@import "~react-toolbox/lib/globals";
+
 .panel {
-  margin: 4rem;
-  margin-top: 8rem;
+  @media screen and (min-width: $layout-breakpoint-xxs) {
+    margin: 4rem;
+    margin-top: 8rem;
+  }
 }
 

@@ -3,21 +3,33 @@ import yelpClient from '~/api/yelp/client'
 
 export default {
   index: async (ctx) => {
-    ctx.body = await Plan.find()
+    ctx.body = await Plan.find({time: {'$gt': Date.now()}})
       .sort({created: 'desc'})
-      .populate('owner', {
+      .populate('user', {
         username: true,
         image: true
       })
+      .limit(10)
       .lean()
   },
 
   create: async (ctx) => {
-    const newPlan = new Plan(ctx.request.body)
-    newPlan.user = ctx.state.user._id
+    const data = ctx.request.body
 
-    const plan = await newPlan.save()
-    ctx.body = plan
+    const newPlan = new Plan({
+      time: data.time,
+      venue: data.venue,
+      user: ctx.state.user._id
+    })
+
+    const savedPlan = await newPlan.save()
+
+    ctx.body = await Plan.findOne({_id: savedPlan._id})
+      .populate('user', {
+        username: true,
+        image: true
+      })
+      .lean()
   },
 
   show: async (ctx) => {
@@ -47,9 +59,14 @@ export default {
   byVenues: async (ctx) => {
     const venues = JSON.parse(ctx.params.venues)
     const plans = await Plan.find({
-      'venue.id': {
-        '$in': venues
-      }
+      '$and': [
+        {'venue.id': {
+          '$in': venues
+        }},
+        {'time': {
+          '$gt': Date.now()
+        }}
+      ]
     })
       .populate('user', {
         username: true,
@@ -61,7 +78,14 @@ export default {
   },
 
   byUser: async (ctx) => {
-    const plans = await Plan.find({'user': ctx.params.user})
+    const plans = await Plan.find({
+        '$and': [
+          {'user': ctx.params.user},
+          {'time': {
+            '$gt': Date.now()
+          }}
+        ]
+      })
       .populate('user', {
         username: true,
         image: true

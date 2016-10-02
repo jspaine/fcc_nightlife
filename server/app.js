@@ -11,6 +11,7 @@ import koajwt from 'koa-jwt'
 import mongoose from 'mongoose'
 
 import webpackDevProxy from './lib/webpackDevProxy'
+import cache from './lib/cache'
 import webpackConfig from '../webpack.config'
 import config from './config'
 import seedDb from './lib/seedDb'
@@ -46,6 +47,8 @@ app.use(koajwt({
   passthrough: true,
   cookie: 'token'
 }))
+
+app.use(cache('\/api\/yelp'))
 
 app.use(passport.initialize())
 app.use(apiRoutes.routes())
