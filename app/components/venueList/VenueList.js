@@ -4,7 +4,7 @@ import {VenueCard} from 'components'
 
 export default class extends Component {
   render() {
-    const {venues, plansByVenue, user, savePlan} = this.props
+    const {venues, plansByVenue, user, savePlan, deletePlan} = this.props
     return (
       <div>
         {venues.map(venue =>
@@ -14,6 +14,7 @@ export default class extends Component {
             plans={plansByVenue(venue.id)}
             user={user}
             savePlan={savePlan}
+            deletePlan={deletePlan}
           />
         )}
       </div>

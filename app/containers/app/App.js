@@ -9,7 +9,7 @@ import {Nav, VenueList} from 'components'
 import {NavDrawer} from 'containers'
 import {loginOAuth} from 'store/modules/auth'
 import {updateTerm, loadResultsRequest} from 'store/modules/search'
-import {loadPlansRequest, savePlanRequest} from 'store/modules/plans'
+import {loadPlansRequest, savePlanRequest, deletePlanRequest} from 'store/modules/plans'
 import {selectors} from 'store/modules'
 
 import style from './App.scss'
@@ -29,15 +29,21 @@ const dispatchToProps = (dispatch) => ({
   pushState: (loc) => dispatch(push(loc)),
   login: (token) => dispatch(loginOAuth(token)),
   updateSearchTerm: (term) => dispatch(updateTerm(term)),
-  savePlan: (plan) => dispatch(savePlanRequest(plan))
+  savePlan: (plan) => dispatch(savePlanRequest(plan)),
+  deletePlan: (planId) => dispatch(deletePlanRequest(planId)),
+  loadPlans: (query) => dispatch(loadPlansRequest(query)),
 })
 
 class App extends React.Component {
   componentWillMount() {
-    const {params, login, pushState} = this.props
+    const {params, login, pushState, searchTerm, searchResults} = this.props
     if (params.token) {
       login(params.token)
       pushState('/')
+    }
+    if (searchTerm && searchTerm !== '' && searchResults.length > 0) {
+      const venues = searchResults.map(res => res.id)
+      this.props.loadPlans({venues})
     }
   }
 
@@ -68,6 +74,7 @@ class App extends React.Component {
               plansByVenue={this.props.plansByVenue}
               user={this.props.user}
               savePlan={this.props.savePlan}
+              deletePlan={this.props.deletePlan}
             /> :
             this.props.children
           }
@@ -87,7 +94,10 @@ class App extends React.Component {
     menuClick: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired,
-    updateSearchTerm: PropTypes.func.isRequired
+    updateSearchTerm: PropTypes.func.isRequired,
+    savePlan: PropTypes.func.isRequired,
+    deletePlan: PropTypes.func.isRequired,
+    loadPlans: PropTypes.func.isRequired
   }
 }
 

@@ -21,7 +21,7 @@ const env = process.env.NODE_ENV || 'development'
 
 mongoose.Promise = global.Promise
 mongoose.connect(config.db.uri, config.db.options)
-if (config.db.seed) seedDb()
+if (config.db.seed) seedDb(true)
 //if (env === 'test') mongoose.set('debug', true)
 
 const app = new Koa()
@@ -66,8 +66,14 @@ if (env === 'production') {
   app.use(convert(webpackDevProxy(webpackConfig.devServer.port)))
 }
 
-app.listen(config.port, config.host, () => {
-  console.log(`server listening on ${config.protocol}://${config.host}:${config.port}`)
-})
+if (env === 'production') {
+  app.listen(config.port, () => {
+    console.log(`server listening on ${config.protocol}://${config.host}:${config.port}`)
+  })
+} else {
+  app.listen(config.port, config.host, () => {
+    console.log(`server listening on ${config.protocol}://${config.host}:${config.port}`)
+  })
+}
 
 export default app

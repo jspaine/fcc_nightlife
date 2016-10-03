@@ -122,7 +122,7 @@ const dev = {
     }),
     ...common.plugins,
   ],
-  devtool: 'eval-source-map'
+  devtool: 'source-map'
 }
 
 const prod = {

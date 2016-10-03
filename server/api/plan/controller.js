@@ -3,14 +3,16 @@ import yelpClient from '~/api/yelp/client'
 
 export default {
   index: async (ctx) => {
-    ctx.body = await Plan.find({time: {'$gt': Date.now()}})
-      .sort({created: 'desc'})
+    const plans = await Plan.find({time: {'$gt': Date.now()}})
+      .sort({'createdAt': 'desc'})
       .populate('user', {
         username: true,
         image: true
       })
-      .limit(10)
+      .limit(20)
       .lean()
+
+    ctx.body = await countOthers(plans)
   },
 
   create: async (ctx) => {
@@ -24,12 +26,13 @@ export default {
 
     const savedPlan = await newPlan.save()
 
-    ctx.body = await Plan.findOne({_id: savedPlan._id})
+    ctx.body = await countOne(await Plan.findOne({_id: savedPlan._id})
       .populate('user', {
         username: true,
         image: true
       })
       .lean()
+    )
   },
 
   show: async (ctx) => {
@@ -59,15 +62,15 @@ export default {
   byVenues: async (ctx) => {
     const venues = JSON.parse(ctx.params.venues)
     const plans = await Plan.find({
-      '$and': [
-        {'venue.id': {
-          '$in': venues
-        }},
-        {'time': {
-          '$gt': Date.now()
-        }}
-      ]
-    })
+        '$and': [
+          {'venue.id': {
+            '$in': venues
+          }},
+          {'time': {
+            '$gt': Date.now()
+          }}
+        ]
+      })
       .populate('user', {
         username: true,
         image: true
@@ -92,6 +95,24 @@ export default {
       })
       .lean()
 
-    ctx.body = plans
+    ctx.body = await countOthers(plans)
+  }
+}
+
+async function countOthers(plans) {
+  return await Promise.all(
+    plans.map(countOne)
+  )
+}
+
+async function countOne(plan) {
+  return {
+    ...plan,
+    others: await Plan.count({
+      '$and': [
+        {'time': plan.time},
+        {'venue.id': plan.venue.id}
+      ]
+    }) - 1
   }
 }

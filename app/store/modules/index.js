@@ -43,6 +43,9 @@ export const selectors = {
   getPlansByTime(state) {
     return fromPlans.getByTime(state.plans, state.entities)
   },
+  getPlansByCreated(state) {
+    return fromPlans.getByCreated(state.plans, state.entities)
+  },
   getPlansByUser(state, userId) {
     return fromPlans.getByUser(userId, state.plans, state.entities)
   },

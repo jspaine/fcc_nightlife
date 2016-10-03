@@ -151,10 +151,7 @@ export const savePlanEpic = action$ =>
         schema: schema.plan
       })
         .map(savePlanSuccess)
-        .catch(err => {
-          console.error('savePlan error', err)
-          return Observable.of(savePlanFailure(err))
-        })
+        .catch(err => Observable.of(savePlanFailure(err)))
     )
 
 export const deletePlanEpic = action$ =>
@@ -180,7 +177,10 @@ export const getByVenue = (venueId, plans, entities) =>
     .filter(plan => plan.venue.id === venueId)
 
 export const getByTime = (plans, entities) =>
-  groupBy(getAll(plans, entities), 'time')
+  sortDesc(getAll(plans, entities), 'time')
+
+export const getByCreated = (plans, entities) =>
+  sortDesc(getAll(plans, entities), 'createdAt')
 
 export const getByUser = (userId, plans, entities) =>
   userId && getAll(plans, entities)
@@ -192,18 +192,25 @@ export const getByVenueGroupByTime = (venueId, plans, entities) =>
 export const getPending = (state) => state.pending
 
 function groupBy(xs, key) {
-  return xs.reduce(function (rv, x) {
-    let v = key instanceof Function ? key(x) : x[key];
-    let el = rv.find((r) => r && r.key === v);
-    if (el) {
-      el.values.push(x);
-    } else {
-      rv.push({ key: v, values: [x] });
-    }
-    return rv;
-  }, []).sort((a, b) => {
-    if (a.key < b.key) return -1
-    if (a.key > b.key) return 1
+  return sortDesc(
+    xs.reduce(function (rv, x) {
+      let v = key instanceof Function ? key(x) : x[key];
+      let el = rv.find((r) => r && r.key === v);
+      if (el) {
+        el.values.push(x);
+      } else {
+        rv.push({ key: v, values: [x] });
+      }
+      return rv;
+    }, []),
+    key
+  )
+}
+
+function sortDesc(plans, key) {
+  return plans && plans.sort((a, b) => {
+    if (a[key] < b[key]) return -1
+    if (a[key] > b[key]) return 1
     return 0
   })
 }

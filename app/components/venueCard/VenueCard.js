@@ -17,10 +17,9 @@ class VenueCard extends Component {
   }
 
   render() {
-    const {venue, plans, user, savePlan} = this.props
-
+    const {venue, plans, user, savePlan, deletePlan} = this.props
     return (
-      <Card>
+      <Card style={{margin: '2rem 2rem 0 0'}}>
         <div className={style.title}>
           <CardTitle
             onClick={this.handleShowDetails}
@@ -43,6 +42,7 @@ class VenueCard extends Component {
           <VenuePlans
             plans={plans}
             savePlan={savePlan}
+            deletePlan={deletePlan}
             user={user}
           />
         }
@@ -54,7 +54,8 @@ class VenueCard extends Component {
     venue: PropTypes.object.isRequired,
     plans: PropTypes.array,
     user: PropTypes.object,
-    savePlan: PropTypes.func.isRequired
+    savePlan: PropTypes.func.isRequired,
+    deletePlan: PropTypes.func.isRequired
   }
 }
 

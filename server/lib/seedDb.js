@@ -36,6 +36,7 @@ async function seedPlans() {
   if (plans) return
   const user1 = await User.findOne({username: 'admin'})
   const user2 = await User.findOne({username: 'test'})
+  const now = Date.now()
   await Plan.create({
     user: user1,
     venue: {
@@ -43,7 +44,7 @@ async function seedPlans() {
       name: 'Ain\'t Nothin\' But...',
       image_url: 'https://s3-media4.fl.yelpcdn.com/bphoto/C1mZteExdl-Xu-gNzizsRQ/o.jpg'
     },
-    time: Date.now() + 70000000
+    time: now + 70000000
   })
   await Plan.create({
     user: user2,
@@ -52,7 +53,7 @@ async function seedPlans() {
       name: 'Ain\'t Nothin\' But...',
       image_url: 'https://s3-media4.fl.yelpcdn.com/bphoto/C1mZteExdl-Xu-gNzizsRQ/o.jpg'
     },
-    time: Date.now() + 70000000
+    time: now + 70000000
   })
   await Plan.create({
     user: user1,
@@ -61,7 +62,7 @@ async function seedPlans() {
       name: 'Nightjar',
       image_url: 'https://s3-media1.fl.yelpcdn.com/bphoto/xCgggQXLi7uhrDysPE9P0w/o.jpg'
     },
-    time: Date.now() + 50000000
+    time: now + 50000000
   })
   await Plan.create({
     user: user2,
@@ -70,7 +71,7 @@ async function seedPlans() {
       name: 'Nightjar',
       image_url: 'https://s3-media1.fl.yelpcdn.com/bphoto/xCgggQXLi7uhrDysPE9P0w/o.jpg'
     },
-    time: Date.now() + 50000000
+    time: now + 50000000
   })
 }
 

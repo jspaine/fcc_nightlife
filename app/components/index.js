@@ -1,4 +1,5 @@
 export Nav from './nav/Nav'
+export PlanList from './planList/PlanList'
 export UserCard from './userCard/UserCard'
 export SearchField from './searchField/SearchField'
 export VenueAddPlanBtn from './venueAddPlanBtn/VenueAddPlanBtn'

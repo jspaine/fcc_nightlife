@@ -8,7 +8,7 @@ export default {
   env,
   protocol: process.env.PROTOCOL || 'http',
   host: process.env.HOST || '0.0.0.0',
-  port: process.env.PORT || port,
+  port: +process.env.PORT || port,
   jwt: process.env.JWT || 'koa-nightlife',
   db: {
     uri: process.env.MONGODB_URI || mongoUri,

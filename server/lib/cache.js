@@ -9,7 +9,7 @@ export default (url) => {
       console.log('cache miss', params)
       await next()
       cache[params] = {
-        expires: Date.now() + 20000,
+        expires: Date.now() + 86400000,
         res: ctx.body
       }
     } else {

@@ -20,7 +20,11 @@ const Nav = ({
   route
 }) =>
   <AppBar theme={AppBarTheme} fixed>
-    <Link to="/" className={style.home}>
+    <Link
+      to="/"
+      className={style.home}
+      onClick={() => updateSearchTerm('')}
+    >
       NightLife!
     </Link>
     {route === '/' &&

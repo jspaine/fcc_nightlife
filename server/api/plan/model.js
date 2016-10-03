@@ -12,6 +12,7 @@ export const PlanSchema = new Schema({
       type: String,
       required: true
     },
+    image_url: String
   },
   user: {
     type: Schema.ObjectId,
