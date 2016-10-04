@@ -33,4 +33,34 @@ function inPlans(plans, user) {
     .length > 0
 }
 
-export {generateNames, generateTime, inPlans}
+function removeDuplicateEvents(plans) {
+  let cache = {}
+  const res = plans.reduce((acc, plan) => {
+    if (!cache[plan.venue.id]) {
+      cache[plan.venue.id] = [plan.time]
+      return acc.concat(plan)
+    }
+    if (cache[plan.venue.id].find(time => plan.time === time)) {
+      return acc
+    }
+    cache[plan.venue.id] = [...cache[plan.venue.id], plan.time]
+    return acc.concat(plan)
+  }, [])
+
+  return res
+}
+
+function getEventInUsersPlans(plan, usersPlans) {
+  const results = usersPlans.filter(p =>
+    p.venue.id === plan.venue.id && p.time === plan.time
+  )
+  return results.length > 0 ? results[0] : null
+}
+
+export {
+  generateNames,
+  generateTime,
+  inPlans,
+  removeDuplicateEvents,
+  getEventInUsersPlans
+}

@@ -4,12 +4,13 @@ import {Button} from 'react-toolbox/lib/button'
 import moment from 'moment'
 
 import {generateNames, generateTime, inPlans} from 'lib/helpers'
+import style from './VenuePlans.scss'
 import theme from 'theme/smallExpandingCardTitle.scss'
 
 export default ({plans, savePlan, deletePlan, user}) =>
   <ul>
     {plans.map(planGroup =>
-      <li style={{display: 'flex', marginLeft: '30px'}} key={planGroup.key}>
+      <li className={style.plan} key={planGroup.key}>
         <CardTitle
           theme={theme}
           title={generateNames(planGroup.values, 4)}

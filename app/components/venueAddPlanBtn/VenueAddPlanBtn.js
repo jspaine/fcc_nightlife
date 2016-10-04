@@ -3,7 +3,7 @@ import {Button} from 'react-toolbox/lib/button'
 import {DatePicker} from 'react-toolbox/lib/date_picker'
 import {TimePicker} from 'react-toolbox/lib/time_picker'
 
-import InvisibleInputPicker from './InvisibleInputPicker.scss'
+import inputTheme from 'theme/invisibleInputPicker.scss'
 
 const SELECT_NONE = 0
 const SELECT_DATE = 1
@@ -65,7 +65,7 @@ class VenueAddPlanBtn extends Component {
           onOverlayClick={this.handleNoSelect}
           onEscKeyDown={this.handleNoSelect}
           value={this.state.date}
-          theme={InvisibleInputPicker}
+          theme={inputTheme}
         />
         <TimePicker
           active={this.state.selecting === SELECT_TIME}
@@ -73,7 +73,7 @@ class VenueAddPlanBtn extends Component {
           onOverlayClick={this.handleNoSelect}
           onEscKeyDown={this.handleNoSelect}
           value={this.state.time}
-          theme={InvisibleInputPicker}
+          theme={inputTheme}
         />
       </div>
     )

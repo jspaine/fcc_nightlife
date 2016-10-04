@@ -15,6 +15,9 @@ export default class extends Component {
             user={user}
             savePlan={savePlan}
             deletePlan={deletePlan}
+            style={{
+              margin: '2rem'
+            }}
           />
         )}
       </div>

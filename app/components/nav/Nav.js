@@ -9,7 +9,7 @@ import LinkStyle from 'react-toolbox/lib/link/theme.scss'
 import {SearchField} from 'components'
 
 import style from './Nav.scss'
-import AppBarTheme from './AppBarTheme.scss'
+import theme from 'theme/appBar.scss'
 
 const Nav = ({
   user,
@@ -19,7 +19,7 @@ const Nav = ({
   updateSearchTerm,
   route
 }) =>
-  <AppBar theme={AppBarTheme} fixed>
+  <AppBar theme={theme} fixed>
     <Link
       to="/"
       className={style.home}

@@ -4,6 +4,7 @@ import {Button} from 'react-toolbox/lib/button'
 
 import {VenuePlans, VenueAddPlanBtn} from 'components'
 import style from './VenueCard.scss'
+import titleTheme from 'theme/cardTitle.scss'
 
 class VenueCard extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class VenueCard extends Component {
   render() {
     const {venue, plans, user, savePlan, deletePlan} = this.props
     return (
-      <Card style={{margin: '2rem 2rem 0 0'}}>
+      <Card className={style.card}>
         <div className={style.title}>
           <CardTitle
             onClick={this.handleShowDetails}
@@ -27,6 +28,7 @@ class VenueCard extends Component {
             avatar={venue.image_url}
             title={venue.name}
             subtitle={venue.categories.map(cat => cat.title).join(', ')}
+            theme={titleTheme}
           />
           <CardText className={style.going}>
             {plans.reduce((acc, x) => acc + x.values.length, 0)} going

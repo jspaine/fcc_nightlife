@@ -18,7 +18,7 @@ async function search(term, categories) {
   try {
     parsed = await response.json()
   } catch (err) {
-    parsed = await response.text()
+    parsed = null
   }
   return parsed
 }

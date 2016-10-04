@@ -1,0 +1,9 @@
+.cardTitle {
+  flex-grow: 1;
+  [data-react-toolbox="avatar"] {
+    min-width: 40px;
+    img {
+      height: 100%;
+    }
+  }
+}

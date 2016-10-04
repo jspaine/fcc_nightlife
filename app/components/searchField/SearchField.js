@@ -3,8 +3,8 @@ import {Input} from 'react-toolbox/lib/'
 import {ProgressBar} from 'react-toolbox/lib/progress_bar'
 
 import style from './SearchField.scss'
-import inputTheme from './InputTheme.scss'
-import ProgressBarTheme from './ProgressBarTheme.scss'
+import inputTheme from 'theme/searchInput.scss'
+import ProgressBarTheme from 'theme/searchProgress.scss'
 
 export default ({
   searchTerm,

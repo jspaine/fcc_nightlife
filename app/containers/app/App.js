@@ -69,13 +69,16 @@ class App extends React.Component {
           />
           {this.props.user && <NavDrawer />}
           {(this.props.searchResults.length > 0 && this.props.location.pathname === '/') ?
-            <VenueList
-              venues={this.props.searchResults}
-              plansByVenue={this.props.plansByVenue}
-              user={this.props.user}
-              savePlan={this.props.savePlan}
-              deletePlan={this.props.deletePlan}
-            /> :
+            <div>
+              <h4>Venues in {this.props.searchTerm}</h4>
+              <VenueList
+                venues={this.props.searchResults}
+                plansByVenue={this.props.plansByVenue}
+                user={this.props.user}
+                savePlan={this.props.savePlan}
+                deletePlan={this.props.deletePlan}
+              />
+            </div> :
             this.props.children
           }
         </Panel>

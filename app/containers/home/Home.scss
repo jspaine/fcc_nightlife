@@ -1,0 +1,8 @@
+@import "~react-toolbox/lib/globals";
+
+.heading {
+  @media screen and (max-width: $layout-breakpoint-xxs) {
+    margin: 1rem;
+  }
+
+}

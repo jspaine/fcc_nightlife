@@ -2,35 +2,27 @@ import React from 'react'
 import {Card, CardTitle, CardText, CardActions} from 'react-toolbox/lib/card'
 import {Button} from 'react-toolbox/lib/button'
 
-import {generateNames, generateTime, inPlans} from 'lib/helpers'
+import {generateNames, generateTime, inPlans, getEventInUsersPlans} from 'lib/helpers'
+import style from './PlanList.scss'
+import titleTheme from 'theme/cardTitle.scss'
 
 export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
-  <ul style={{
-    listStyle: 'none',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    margin: '1rem'
-  }}>
+  <ul className={style.list}>
     {plans.map(plan =>
-      <li
-        key={plan._id}
-        style={{
-          margin: '1rem',
-          flexGrow: 1
-        }}
-      >
+      <li key={plan._id} className={style.plan}>
         <Card>
           <CardTitle
             title={plan.venue.name}
             subtitle={generateTime(plan.time)}
             avatar={plan.venue.image_url}
+            theme={titleTheme}
           />
           <CardText>
-              {`${plan.user.username} ${plan.others ? ' and ' + plan.others : ''} ${plan.others > 0 ? (plan.others > 1 ? ' others' : 'other') : ''}`}
+              {`${plan.user.username} ${plan.others ? ' and ' + plan.others : ''}`}
+              {`${plan.others > 0 ? (plan.others > 1 ? ' others' : 'other') : ''}`}
               {` added ${generateTime(plan.createdAt)}`}
           </CardText>
-          {user && !getInUsersPlans(plan, usersPlans) &&
+          {user && !getEventInUsersPlans(plan, usersPlans) &&
             <CardActions>
               <Button
                 icon="group_add"
@@ -40,11 +32,13 @@ export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
               </Button>
             </CardActions>
           }
-          {user && getInUsersPlans(plan, usersPlans) &&
+          {user && getEventInUsersPlans(plan, usersPlans) &&
             <CardActions>
               <Button
                 icon="cancel"
-                onClick={() => deletePlan(getInUsersPlans(plan, usersPlans)._id)}
+                onClick={() => deletePlan(
+                  getEventInUsersPlans(plan, usersPlans)._id
+                )}
               >
                 Cancel
               </Button>
@@ -55,9 +49,4 @@ export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
     )}
   </ul>
 
-function getInUsersPlans(plan, usersPlans) {
-  const results = usersPlans.filter(p =>
-    p.venue.id === plan.venue.id && p.time === plan.time
-  )
-  return results.length > 0 ? results[0] : null
-}
+

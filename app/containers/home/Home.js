@@ -1,9 +1,11 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
+import {removeDuplicateEvents} from 'lib/helpers'
 import {PlanList} from 'components'
 import {loadPlansRequest, savePlanRequest, deletePlanRequest} from 'store/modules/plans'
 import {selectors} from 'store/modules'
+import style from './Home.scss'
 
 const stateToProps = (state) => ({
   plansByCreated: selectors.getPlansByCreated(state),
@@ -30,13 +32,11 @@ class Home extends React.Component {
     const coming = removeDuplicateEvents(plansByTime).slice(0, 5)
     const users = user ? removeDuplicateEvents(plansByUser(user._id)) : []
     const recent = removeDuplicateEvents(plansByCreated).slice(0, 5)
-    console.log('users', users)
-
     return (
       <div>
         {user && users.length > 0 &&
           <div>
-            <h4 style={{margin: '1rem'}}>My Plans</h4>
+            <h4 className={style.heading}>My Plans</h4>
             <PlanList
               plans={users.slice(0, 5)}
               savePlan={this.props.savePlan}
@@ -46,7 +46,7 @@ class Home extends React.Component {
           </div>
         }
         <div>
-          <h4 style={{margin: '1rem'}}>Just Added</h4>
+          <h4 className={style.heading}>Just Added</h4>
           <PlanList
             plans={recent}
             savePlan={this.props.savePlan}
@@ -56,7 +56,7 @@ class Home extends React.Component {
           />
         </div>
         <div>
-          <h4 style={{margin: '1rem'}}>Coming Up</h4>
+          <h4 className={style.heading}>Coming Up</h4>
           <PlanList
             plans={coming}
             savePlan={this.props.savePlan}
@@ -75,20 +75,3 @@ class Home extends React.Component {
 }
 
 export default connect(stateToProps, dispatchToProps)(Home)
-
-function removeDuplicateEvents(plans) {
-  let cache = {}
-  const res = plans.reduce((acc, plan) => {
-    if (!cache[plan.venue.id]) {
-      cache[plan.venue.id] = [plan.time]
-      return acc.concat(plan)
-    }
-    if (cache[plan.venue.id].find(time => plan.time === time)) {
-      return acc
-    }
-    cache[plan.venue.id] = [...cache[plan.venue.id], plan.time]
-    return acc.concat(plan)
-  }, [])
-  console.log('cache', cache)
-  return res
-}

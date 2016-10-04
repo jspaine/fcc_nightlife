@@ -21,7 +21,7 @@ const env = process.env.NODE_ENV || 'development'
 
 mongoose.Promise = global.Promise
 mongoose.connect(config.db.uri, config.db.options)
-if (config.db.seed) seedDb(true)
+if (config.db.seed) seedDb()
 //if (env === 'test') mongoose.set('debug', true)
 
 const app = new Koa()

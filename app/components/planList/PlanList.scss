@@ -1,0 +1,14 @@
+@import "~react-toolbox/lib/globals";
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: $unit;
+}
+
+.plan {
+  margin: $unit;
+  flex-grow: 1;
+}
