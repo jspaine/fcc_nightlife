@@ -20,7 +20,7 @@ export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
           />
           <CardText>
               {`${plan.user.username} ${plan.others ? ' and ' + plan.others : ''}`}
-              {`${plan.others > 0 ? (plan.others > 1 ? ' others' : 'other') : ''}`}
+              {`${plan.others > 0 ? (plan.others > 1 ? ' others' : ' other') : ''}`}
               {` added ${generateTime(plan.createdAt)}`}
           </CardText>
           <CardActions>
