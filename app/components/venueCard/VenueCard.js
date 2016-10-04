@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {Card, CardTitle, CardText, CardActions} from 'react-toolbox/lib/card'
 import {Button} from 'react-toolbox/lib/button'
 
-import {VenuePlans, VenueAddPlanBtn} from 'components'
+import {VenuePlans, VenueAddPlanBtn, YelpButton} from 'components'
 import style from './VenueCard.scss'
 import titleTheme from 'theme/cardTitle.scss'
 
@@ -34,12 +34,12 @@ class VenueCard extends Component {
             {plans.reduce((acc, x) => acc + x.values.length, 0)} going
           </CardText>
         </div>
-        {user &&
-          <CardActions>
+        <CardActions>
+          <YelpButton id={venue.id} />
+          {user &&
             <VenueAddPlanBtn venue={venue} savePlan={savePlan} />
-          </CardActions>
-        }
-
+          }
+        </CardActions>
         {this.state.details &&
           <VenuePlans
             plans={plans}

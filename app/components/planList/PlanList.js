@@ -3,6 +3,7 @@ import {Card, CardTitle, CardText, CardActions} from 'react-toolbox/lib/card'
 import {Button} from 'react-toolbox/lib/button'
 
 import {generateNames, generateTime, inPlans, getEventInUsersPlans} from 'lib/helpers'
+import {YelpButton} from 'components'
 import style from './PlanList.scss'
 import titleTheme from 'theme/cardTitle.scss'
 
@@ -22,18 +23,17 @@ export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
               {`${plan.others > 0 ? (plan.others > 1 ? ' others' : 'other') : ''}`}
               {` added ${generateTime(plan.createdAt)}`}
           </CardText>
-          {user && !getEventInUsersPlans(plan, usersPlans) &&
-            <CardActions>
+          <CardActions>
+            <YelpButton id={plan.venue.id} />
+            {user && !getEventInUsersPlans(plan, usersPlans) &&
               <Button
                 icon="group_add"
                 onClick={() => savePlan(plan)}
               >
                 Join
               </Button>
-            </CardActions>
-          }
-          {user && getEventInUsersPlans(plan, usersPlans) &&
-            <CardActions>
+            }
+            {user && getEventInUsersPlans(plan, usersPlans) &&
               <Button
                 icon="cancel"
                 onClick={() => deletePlan(
@@ -42,8 +42,8 @@ export default ({plans, savePlan, deletePlan, user, usersPlans}) =>
               >
                 Cancel
               </Button>
-            </CardActions>
-          }
+            }
+          </CardActions>
         </Card>
       </li>
     )}
